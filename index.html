@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrewCalc Vanilla JS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="src/styles.css">
+
+</head>
+<body>
+
+<div class="container">
+  <!-- Left Panel -->
+  <div class="left-panel">
+    <div class="mb-4">
+      <h2 class="text-sm font-bold mb-2">📊 Calculation Results</h2>
+      <div class="space-y-1 text-sm">
+        <div class="flex justify-between"><span>ABV</span><span id="calc-abv">%</span></div>
+        <div class="flex justify-between"><span>OG</span><span id="calc-og">1.xxx</span></div>
+        <div class="flex justify-between"><span>FG</span><span id="calc-fg">1.xxx</span></div>
+        <div class="flex justify-between"><span>IBU</span><span id="calc-ibu">xx</span></div>
+        <div class="flex justify-between"><span>EBC</span><span id="calc-ebc">xx</span></div>
+        <div class="flex justify-between"><span>pH</span><span id="calc-ph">xx</span></div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-bold mb-2">Navigation</h2>
+      <div class="nav-item bg-gray-100 px-2 py-2 mb-1 cursor-pointer">📖 Recipes</div>
+      <div class="nav-item px-2 py-2 mb-1 cursor-pointer">🍺 Profiles</div>
+      <div class="nav-item px-2 py-2 mb-1 cursor-pointer">🎨 Styles</div>
+      <div class="nav-item px-2 py-2 mb-1 cursor-pointer">⚙️ Settings</div>
+      <div class="nav-item px-2 py-2 cursor-pointer">💧 Water calc</div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <!-- Header -->
+    <div class="header-line">
+        <span>Recipe name:</span>
+        <input type="text" id="recipeName" placeholder="Enter recipe name" />
+        <button id="saveRecipe">💾 Save</button>
+    </div>
+    <!-- Fermentables -->
+    <div class="mb-6">
+      <div class="flex justify-between mb-2 items-center">
+        <span class="font-semibold text-sm">Fermentables</span>
+      </div>
+      <table class="w-full border-collapse border border-black text-sm">
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1 text-left bg-gray-50">Name</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Amount (kg)</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">%</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="fermentable-body"></tbody>
+      </table>
+      <!-- moved button below the table -->
+      <div class="text-right">
+        <button id="add-fermentable" class="text-xs underline">+ Add</button>
+      </div>
+    </div>
+
+    <!-- Hops -->
+    <div class="mb-6">
+      <div class="flex justify-between mb-2 items-center">
+        <span class="font-semibold text-sm">Hops</span>
+      </div>
+      <table class="w-full border-collapse border border-black text-sm">
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1 text-left bg-gray-50">Name</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">Amount (g)</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">Time (min)</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Where</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">IBU</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="hop-body"></tbody>
+      </table>
+      <!-- moved button below the table -->
+      <div class="text-right">
+        <button id="add-hop" class="text-xs underline">+ Add</button>
+      </div>
+    </div>
+
+    <!-- Additives -->
+    <div class="mb-6">
+      <div class="flex justify-between mb-2 items-center">
+        <span class="font-semibold text-sm">Additives / Spices</span>
+      </div>
+      <table class="w-full border-collapse border border-black text-sm">
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1 text-left bg-gray-50">Name</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Amount</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Type</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Where</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="additive-body"></tbody>
+      </table>
+      <!-- moved button below the table -->
+      <div class="text-right">
+        <button id="add-additive" class="text-xs underline">+ Add</button>
+      </div>
+    </div>
+
+    <!-- Mash profile -->
+    <div>
+      <div class="flex justify-between mb-2 items-center">
+        <span class="font-semibold text-sm">Mash profile</span>
+      </div>
+      <table class="w-full border-collapse border border-black text-sm">
+        <thead>
+          <tr>
+            <th class="border border-black px-2 py-1 w-20 bg-gray-50">Step No.</th>
+            <th class="border border-black px-2 py-1 text-left bg-gray-50">Name</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Temp °C</th>
+            <th class="border border-black px-2 py-1 w-32 bg-gray-50">Time (min)</th>
+            <th class="border border-black px-2 py-1 w-24 bg-gray-50">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="mash-body"></tbody>
+      </table>
+      <!-- moved button below the table -->
+      <div class="text-right">
+        <button id="add-mash" class="text-xs underline">+ Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="src/index.js" defer></script>
+</body>
+</html>
